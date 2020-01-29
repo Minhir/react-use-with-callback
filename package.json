@@ -1,15 +1,23 @@
 {
   "name": "react-use-with-callback",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.1",
+  "description": "React useWithCallback hook helps you to combine callbacks",
+  "main": "lib/index.js",
+  "files": [
+    "/lib"
+  ],
   "scripts": {
     "test": "jest",
     "build": "npm run test && tsc"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "react",
+    "hook",
+    "useWithCallback"
+  ],
+  "author": "Vladimir Ivakin",
+  "license": "MIT",
+  "homepage": "https://github.com/Minhir/react-use-with-callback",
   "devDependencies": {
     "@types/enzyme": "^3.10.4",
     "@types/jest": "^24.0.25",
