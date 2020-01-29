@@ -1,6 +1,6 @@
 {
   "name": "react-use-with-callback",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "React useWithCallback hook helps you to combine callbacks",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
@@ -32,6 +32,9 @@
     "react": "^16.8.0",
     "ts-jest": "^24.3.0",
     "typescript": "^3.7.3"
+  },
+  "peerDependencies": {
+    "react": "^16.8"
   },
   "jest": {
     "setupFilesAfterEnv": [

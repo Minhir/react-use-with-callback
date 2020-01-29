@@ -61,7 +61,7 @@ const MyComponent = ({handleClick}) => {
 };
 ```
 
-Step by step:
+Result of click action step by step:
 
 1. setCounter increases counter by 1. Here `counter = 1`.
 2. setCounter multiplies counter by 10. Here `counter = 10`.
