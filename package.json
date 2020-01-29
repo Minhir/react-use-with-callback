@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "React useWithCallback hook helps you to combine callbacks",
   "main": "lib/index.js",
+  "types": "./lib/index.d.ts",
   "files": [
     "/lib"
   ],
