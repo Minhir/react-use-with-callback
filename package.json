@@ -8,8 +8,9 @@
     "/lib"
   ],
   "scripts": {
+    "build": "tsc",
     "test": "jest",
-    "build": "npm run test && tsc"
+    "test:coverage": "npm run test -- --collect-coverage"
   },
   "keywords": [
     "react",
