@@ -46,5 +46,9 @@
     ],
     "testEnvironment": "enzyme",
     "preset": "ts-jest"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/Minhir/react-use-with-callback.git"
   }
 }
