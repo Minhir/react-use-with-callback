@@ -15,7 +15,9 @@
   "keywords": [
     "react",
     "hook",
-    "useWithCallback"
+    "useWithCallback",
+    "callback",
+    "combine callbacks"
   ],
   "author": "Vladimir Ivakin",
   "license": "MIT",
