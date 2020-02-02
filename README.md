@@ -1,7 +1,13 @@
 # Combine your callbacks with **useWithCallback** hook!
 
+[![](https://img.shields.io/npm/v/react-use-with-callback)](https://www.npmjs.com/package/react-use-with-callback)
+![](https://img.shields.io/github/workflow/status/minhir/react-use-with-callback/Node%20CI)
+[![](https://img.shields.io/coveralls/github/Minhir/react-use-with-callback)](https://coveralls.io/github/Minhir/react-use-with-callback)
+![](https://img.shields.io/github/license/minhir/react-use-with-callback?color=blue)
+
+
 ```javascript
-const MyComponent = ({handleA, handleB}) => {
+const Foo = ({handleA, handleB}) => {
     const [counter, setCounter] = useState(0);
 
     const withIncrement = useWithCallback(
@@ -10,9 +16,8 @@ const MyComponent = ({handleA, handleB}) => {
     );
 
     return (
-        <SomeComponent
-            onA={withIncrement(handleA)}
-            onB={withIncrement(handleB)}/>
+        <Bar onA={withIncrement(handleA)}
+             onB={withIncrement(handleB)}/>
     );
 };
 ```
@@ -24,16 +29,13 @@ const Foo = ({func}) => {
     const fn = () => {...};
 
     // Pass a function and an array of dependencies (as well as `useCallback`).
-    const withFn = useWithCallback(
-        fn,
-        []
-    );
+    const withFn = useWithCallback(fn, []);
 
     // `withFn` accepts another function and return handler
     const handleClick = withFn(func);
 
-    // On click action first `fn` will be called and then `func`
-    return <div onClick={handleClick}>;
+    // On click action `fn` will be called and then `func`
+    return <div onClick={handleClick}/>;
 };
 ```
 
