@@ -1,6 +1,6 @@
 {
   "name": "react-use-with-callback",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "React useWithCallback hook helps you to combine callbacks",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
