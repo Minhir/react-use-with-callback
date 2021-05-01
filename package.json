@@ -24,14 +24,9 @@
   "homepage": "https://github.com/Minhir/react-use-with-callback",
   "devDependencies": {
     "@testing-library/react-hooks": "^5.1.2",
-    "@types/enzyme": "^3.10.4",
     "@types/jest": "^24.0.25",
     "@types/react": "^16.9.16",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
     "jest": "^24.9.0",
-    "jest-environment-enzyme": "^7.1.2",
-    "jest-enzyme": "^7.1.2",
     "react": "^16.8.0",
     "react-dom": "^16.12.0",
     "ts-jest": "^24.3.0",
@@ -41,11 +36,6 @@
     "react": "^16.8"
   },
   "jest": {
-    "setupFilesAfterEnv": [
-      "./tests/setupTests.js",
-      "jest-enzyme"
-    ],
-    "testEnvironment": "enzyme",
     "preset": "ts-jest"
   },
   "repository": {
