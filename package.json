@@ -34,7 +34,7 @@
     "react-dom": "^16.12.0",
     "react": "^16.8.0",
     "ts-jest": "^24.3.0",
-    "typescript": "^3.7.3"
+    "typescript": "^4.2.4"
   },
   "peerDependencies": {
     "react": "^16.8"
@@ -48,7 +48,7 @@
     "preset": "ts-jest"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/Minhir/react-use-with-callback.git"
+    "type": "git",
+    "url": "https://github.com/Minhir/react-use-with-callback.git"
   }
 }
