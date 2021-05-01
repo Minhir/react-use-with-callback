@@ -1,115 +1,108 @@
-import React, { useState } from 'react';
-import {mount} from 'enzyme';
+import {useState} from 'react';
+import {renderHook, act} from '@testing-library/react-hooks';
 
 import useWithCallback from '../src';
 
 
-type FooProps = {
-    handleCounter: (n: number) => void,
-    handleClick: () => void,
-    handleMouseEnter: () => void
-}
-
-const Foo: React.FC<FooProps> = ({handleCounter, handleClick, handleMouseEnter}) => {
+function useSomeScenario(customCallback: Function) {
     const [counter, setCounter] = useState(0);
 
     const withIncrement = useWithCallback(() => setCounter(x => x + 1), []);
-    const withHandleCounter = useWithCallback(() => handleCounter(counter), [counter]);
+    const withDouble = useWithCallback(() => setCounter(x => 2 * x), []);
 
-    return(
-        <div onClick={withHandleCounter(handleClick)}
-             onMouseEnter={withIncrement(withHandleCounter(handleMouseEnter))}/>
-    );
+    return {
+        increment: withIncrement(customCallback),
+        double: withDouble(customCallback),
+        incrementAndDouble: withIncrement(withDouble(customCallback)),
+        doubleAndIncrement: withDouble(withIncrement(customCallback)),
+        counter
+    };
 }
 
 describe('useWithCallback', function() {
-    let handleCounter = jest.fn();
-    let handleClick = jest.fn();
-    let handleMouseEnter = jest.fn();
+    it('passes arguments to callback', () => {
+        const cbk = jest.fn();
 
-    beforeEach(() => {
-        handleCounter = jest.fn();
-        handleClick = jest.fn();
-        handleMouseEnter = jest.fn();
+        const {result} = renderHook(() => useSomeScenario(cbk));
+
+        act(() => result.current.increment(1, 2));
+
+        expect(cbk).toHaveBeenLastCalledWith(1, 2);
+
+        act(() => result.current.double(3, 4));
+
+        expect(cbk).toHaveBeenLastCalledWith(3, 4);
+
+        act(() => result.current.incrementAndDouble(5, 6, 7));
+
+        expect(cbk).toHaveBeenLastCalledWith(5, 6, 7);
+
+        act(() => result.current.doubleAndIncrement(8));
+
+        expect(cbk).toHaveBeenLastCalledWith(8);
     });
 
-    it('should call all callbacks', () => {
-        const wrapper = mount(
-            <Foo handleCounter={handleCounter}
-                 handleClick={handleClick}
-                 handleMouseEnter={handleMouseEnter}/>
-        );
+    it('caches combined function', () => {
+        const cbk1 = jest.fn();
+        const cbk2 = jest.fn();
 
-        wrapper.simulate('click');
+        const {result, rerender} = renderHook(({cbk}: {cbk: Function}) => useSomeScenario(cbk), {
+            initialProps: {
+                cbk: cbk1
+            }
+        });
 
-        expect(handleCounter).toBeCalledWith(0);
-        expect(handleClick).toBeCalled();
-        expect(handleMouseEnter).not.toBeCalled();
+        const increment1 = result.current.increment;
+        const double1 = result.current.double;
+        const doubleAndIncrement1 = result.current.doubleAndIncrement;
+        const incrementAndDouble1 = result.current.incrementAndDouble;
 
-        wrapper.simulate('mouseEnter');
+        rerender({cbk: cbk2});
 
-        expect(handleCounter).toHaveBeenLastCalledWith(0);
-        expect(handleMouseEnter).toBeCalled();
+        const increment2 = result.current.increment;
+        const double2 = result.current.double;
+        const doubleAndIncrement2 = result.current.doubleAndIncrement;
+        const incrementAndDouble2 = result.current.incrementAndDouble;
 
-        wrapper.simulate('click');
+        rerender({cbk: cbk1});
 
-        expect(handleCounter).toHaveBeenLastCalledWith(1);
+        const increment3 = result.current.increment;
+        const double3 = result.current.double;
+        const doubleAndIncrement3 = result.current.doubleAndIncrement;
+        const incrementAndDouble3 = result.current.incrementAndDouble;
+
+        expect(increment1).toBe(increment3);
+        expect(increment1).not.toBe(increment2);
+
+        expect(double1).toBe(double3);
+        expect(double1).not.toBe(double2);
+
+        expect(doubleAndIncrement1).toBe(doubleAndIncrement3);
+        expect(doubleAndIncrement1).not.toBe(doubleAndIncrement2);
+
+        expect(incrementAndDouble1).toBe(incrementAndDouble3);
+        expect(incrementAndDouble1).not.toBe(incrementAndDouble2);
     });
 
-    it('should cache combined function', () => {
-        const wrapper = mount(
-            <Foo handleCounter={handleCounter}
-                 handleClick={handleClick}
-                 handleMouseEnter={handleMouseEnter}/>
-        );
+    it('applies sequentially', () => {
+        const cbk = jest.fn();
 
-        const firstClickHandler = wrapper.children().props().onClick;
-        const firstMouseEnterHandler = wrapper.children().props().onMouseEnter;
+        const {result} = renderHook(() => useSomeScenario(cbk));
 
-        // re-render
-        wrapper.setProps({});
+        act(() => result.current.increment());
 
-        const secondClickHandler = wrapper.children().props().onClick;
-        const secondMouseEnterHandler = wrapper.children().props().onMouseEnter;
+        expect(result.current.counter).toBe(1);
 
-        expect(firstClickHandler).not.toEqual(firstMouseEnterHandler);
-        expect(firstClickHandler).toEqual(secondClickHandler);
-        expect(firstMouseEnterHandler).toEqual(secondMouseEnterHandler);
+        act(() => result.current.double());
+
+        expect(result.current.counter).toBe(2);
+
+        act(() => result.current.incrementAndDouble());
+
+        expect(result.current.counter).toBe(6);
+
+        act(() => result.current.doubleAndIncrement());
+
+        expect(result.current.counter).toBe(13);
     });
-
-    it('should apply sequentially,', () => {
-        const Bar: React.FC<{handleClick: (n: number) => void}> = ({handleClick}) => {
-            const [counter, setCounter] = useState(0);
-
-            const withIncrement = useWithCallback(
-                () => setCounter(prevCounter => prevCounter + 1),
-                []
-            );
-
-            const withMultiply = useWithCallback(
-                () => setCounter(prevCounter => prevCounter * 10),
-                []
-            );
-
-            return (
-                <div onClick={withIncrement(withMultiply(() => handleClick(counter)))}/>
-            );
-        };
-
-        const wrapper = mount(
-            <Bar handleClick={handleClick}/>
-        );
-
-        wrapper.simulate('click');
-
-        expect(handleClick).toHaveBeenCalledWith(0);
-
-        wrapper.simulate('click');
-
-        expect(handleClick).toHaveBeenLastCalledWith(10);
-
-        wrapper.simulate('click');
-
-        expect(handleClick).toHaveBeenLastCalledWith(110);
-    })
 });
