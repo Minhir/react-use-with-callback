@@ -1,7 +1,7 @@
 # Combine your callbacks with **useWithCallback** hook!
 
 [![](https://img.shields.io/npm/v/react-use-with-callback)](https://www.npmjs.com/package/react-use-with-callback)
-![](https://img.shields.io/github/workflow/status/minhir/react-use-with-callback/Node%20CI)
+![](https://img.shields.io/github/actions/workflow/status/minhir/react-use-with-callback/nodejs.yml?branch=master)
 [![](https://img.shields.io/coveralls/github/Minhir/react-use-with-callback)](https://coveralls.io/github/Minhir/react-use-with-callback)
 ![](https://img.shields.io/github/license/minhir/react-use-with-callback?color=blue)
 
